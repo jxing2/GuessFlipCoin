@@ -1,0 +1,43 @@
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Random;
+
+
+public class Guess_Rational implements Observer, Guess {
+	
+	int total = 0;
+	int yes = 0;
+	int no = 0;
+	CoinSide myGuess;
+	int myGuessCount = 0;
+	Random ran = new Random();
+	public CoinSide guess()
+	{
+		if(yes > no)
+			return CoinSide.Negative;
+		if(yes < no)
+			return CoinSide.Positive;
+		return ran.nextInt(2)==1 ? CoinSide.Positive : CoinSide.Negative;
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		++total;
+		myGuess = guess();
+		CoinSide cf = (CoinSide)arg;
+		if(cf.equals(CoinSide.Positive))
+			++yes;
+		else
+			++no;
+		if(cf.equals(myGuess))
+		{
+			++myGuessCount;
+		}
+	}
+	public void showInfo()
+	{
+		System.out.println("Rational : Total: " + total + ", yes: " + yes + ", no: " + no + ", Guess_Right: " 
+				+ myGuessCount + ", rate: " + ((double)myGuessCount/ total));
+	}
+}
